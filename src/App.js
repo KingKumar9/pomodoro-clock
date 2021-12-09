@@ -171,12 +171,10 @@ class App extends React.Component {
             </div>
           </div>
           
-
           <div className="timerContainer">
             <h1 id="timer-label">{ this.state.session }</h1>
             <h1 id="time-left">{ this.state.sessionMin }:{ this.state.sessionSec }</h1>
           </div>
-
 
           <div className="controlsContainer">
             <button onClick={ this.startStop } id="start_stop">Start</button>
