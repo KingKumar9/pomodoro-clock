@@ -4,8 +4,78 @@
   box-sizing: border-box;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
+h1, h3 {
+  text-align: center;
+  text-transform: uppercase;
+  color: white;
+  padding: 10px;
+}
+
 .container {
   width: 100vw;
   height: 100vh;
-  background-color: brown;
+  background-color: brown; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clock {
+  width: 70%;
+  height: 70%;
+  background-color: blueviolet;
+  display: flex;
+  flex-direction: column;
+}
+
+.lengthContainer {
+  width: 100%;
+  background-color: blue;
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.length {
+  width: 100%;
+}
+
+.setters {
+  color: white;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 25px;
+}
+
+.valueIncrement {
+  width: 15px;
+  height: 15px;
+  background: none;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  transform: translateY(12px) rotate(-135deg);
+}
+
+.valueDecrement {
+  width: 15px;
+  height: 15px;
+  background: none;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  transform: translateY(3px) rotate(45deg);
+}
+
+.controlsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
