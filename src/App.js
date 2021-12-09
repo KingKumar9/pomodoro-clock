@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/heading-has-content */
 /* eslint-disable no-eval */
-import React from 'react'
+import React from 'react';
+import $ from 'jquery'
 import './App.css';
 
 let play = false
@@ -8,10 +10,12 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      break: 'BREAK',
+      break: 'break',
+      breakLength: '5',
       breakMin: '5',
       breakSec: '00',
-      session: 'SESSION',
+      session: 'session',
+      sessionLength: '25',
       sessionMin: '25',
       sessionSec: '00'
     }
@@ -23,8 +27,10 @@ class App extends React.Component {
 
   reset = () => {
     this.setState({
+      breakLength: '5',
       breakMin: '5',
       breakSec: '00',
+      sessionLength: '25',
       sessionMin: '25',
       sessionSec: '00'
     })
@@ -34,10 +40,12 @@ class App extends React.Component {
   decrement = (e) => {
     if (e.target.id === "break-decrement" && this.state.breakMin > '1') {
       this.setState({
+        breakLength: eval(`${ this.state.breakLength } - 1`),
         breakMin: eval(`${ this.state.breakMin } - 1`)
       })
     } else if (e.target.id === "session-decrement" && this.state.sessionMin > '1') {
       this.setState({
+        sessionLength: eval(`${ this.state.sessionLength } - 1`),
         sessionMin: eval(`${ this.state.sessionMin } - 1`)
       })
     }
@@ -46,10 +54,12 @@ class App extends React.Component {
   increment = (e) => {
     if (e.target.id === "break-increment" && this.state.breakMin < '60') {
       this.setState({
+        breakLength: eval(`${ this.state.breakLength } + 1`),
         breakMin: eval(`${ this.state.breakMin } + 1`)
       })
     } else if (e.target.id === "session-increment" && this.state.sessionMin < '60') {
       this.setState({
+        sessionLength: eval(`${ this.state.sessionLength } + 1`),
         sessionMin: eval(`${ this.state.sessionMin } + 1`)
       })
     }
@@ -136,8 +146,99 @@ class App extends React.Component {
             sessionSec: [0, equation].join('')
           })
         } else if (that.state.sessionSec === '00' && play) {
-          clearInterval(interval)
-          play = !play
+          
+          
+          if (that.state.breakMin > '10' && play) {
+              if (that.state.breakSec > '10' && play) {
+                that.setState({
+                  breakSec: eval(`${ that.state.breakSec } - 1`)
+                })
+              } else if (that.state.breakSec > '00' && play) {
+                let firstNum = parseInt(that.state.breakSec)
+                let equation = eval(`${ firstNum } - 1`)
+                that.setState({
+                  breakSec: [0, equation].join('')
+                })
+              } else if (that.state.breakSec === '00' && play) {
+                that.setState({
+                  breakSec: '59',
+                  breakMin: eval(`${ that.state.breakMin } - 1`)
+                })
+              } else {
+                clearInterval(interval)
+              }
+            } else if (that.state.breakMin === 10 && play) {
+              if (that.state.breakSec > '10' && play) {
+                that.setState({
+                  breakSec: eval(`${ that.state.breakSec } - 1`)
+                })
+              } else if (that.state.breakSec > '00' && play) {
+                let firstNum = parseInt(that.state.breakSec)
+                let equation = eval(`${ firstNum } - 1`)
+                that.setState({
+                  breakSec: [0, equation].join('')
+                })
+              } else if (that.state.breakSec === '00' && play) {
+                let firstNum = parseInt(that.state.breakMin)
+                let equation = eval(`${ firstNum } - 1`)
+                that.setState({
+                  breakSec: '59',
+                  breakMin: [0, equation].join('')
+                })
+              } else {
+                clearInterval(interval)
+              }
+            } else if (that.state.breakMin > '00' && play) {
+              let minFirstNum = parseInt(that.state.breakMin)
+              that.setState({
+                breakMin: [0, minFirstNum].join('')
+              })
+              if (that.state.breakSec > '10' && play) {
+                that.setState({
+                  breakSec: eval(`${ that.state.breakSec } - 1`)
+                })
+              } else if (that.state.breakSec > '00' && play) {
+                let firstNum = parseInt(that.state.breakSec)
+                let equation = eval(`${ firstNum } - 1`)
+                that.setState({
+                  breakSec: [0, equation].join('')
+                })
+              } else if (that.state.breakSec === '00' && play) {
+                let firstNum = parseInt(that.state.breakMin)
+                let equation = eval(`${ firstNum } - 1`)
+                that.setState({
+                  breakSec: '59',
+                  breakMin: [0, equation].join('')
+                })
+              } else {
+                clearInterval(interval)
+              }
+            } else if (that.state.breakMin === '00' && play) {
+              if (that.state.breakSec > '10' && play) {
+                that.setState({
+                  breakSec: eval(`${ that.state.breakSec } - 1`)
+                })
+              } else if (that.state.breakSec > '00' && play) {
+                let firstNum = parseInt(that.state.breakSec)
+                let equation = eval(`${ firstNum } - 1`)
+                that.setState({
+                  breakSec: [0, equation].join('')
+                })
+              } else if (that.state.breakSec === '00' && play) {
+                that.setState({
+                  breakMin: that.state.breakLength,
+                  breakSec: '00',
+                  sessionMin: that.state.sessionLength,
+                  sessionSec: '00'
+                })
+              } else {
+                clearInterval(interval)
+              }
+            } else {
+              clearInterval(interval)
+            }
+
+            
         } else {
           clearInterval(interval)
         }
@@ -145,8 +246,24 @@ class App extends React.Component {
         clearInterval(interval)
       }
     }, 1000)
+
+    
   }
 
+  componentDidMount() {
+    $("#timer-label").html(this.state.session)
+    $("#time-left").html(`${ this.state.sessionMin }:${ this.state.sessionSec }`)
+  }
+
+  componentDidUpdate() {
+    if (this.state.sessionMin === '00' && this.state.sessionSec === '00') {
+      $("#timer-label").html(this.state.break)
+      $("#time-left").html(`${ this.state.breakMin }:${ this.state.breakSec }`)
+    } else {
+      $("#timer-label").html(this.state.session)
+      $("#time-left").html(`${ this.state.sessionMin }:${ this.state.sessionSec }`)
+    }
+  }
 
   render() {
     return (
@@ -157,7 +274,7 @@ class App extends React.Component {
               <h3 id="break-label">break length</h3>
               <div className="setters">
                 <button onClick={ this.decrement } id="break-decrement" className="valueDecrement" />
-                <h2 id="break-length">{ this.state.breakMin }</h2>
+                <h2 id="break-length">{ this.state.breakLength }</h2>
                 <button onClick={ this.increment } id="break-increment" className="valueIncrement" />
               </div>
             </div>
@@ -165,15 +282,15 @@ class App extends React.Component {
               <h3 id="session-label">session length</h3>
               <div className="setters">
                 <button onClick={ this.decrement } id="session-decrement" className="valueDecrement" />
-                <h2 id="session-length">{ this.state.sessionMin }</h2>
+                <h2 id="session-length">{ this.state.sessionLength }</h2>
                 <button onClick={ this.increment } id="session-increment" className="valueIncrement" />
               </div>
             </div>
           </div>
           
           <div className="timerContainer">
-            <h1 id="timer-label">{ this.state.session }</h1>
-            <h1 id="time-left">{ this.state.sessionMin }:{ this.state.sessionSec }</h1>
+            <h1 id="timer-label"></h1>
+            <h1 id="time-left"></h1>
           </div>
 
           <div className="controlsContainer">
