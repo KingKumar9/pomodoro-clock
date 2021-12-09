@@ -8,8 +8,10 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      break: 'BREAK',
       breakMin: '5',
       breakSec: '00',
+      session: 'SESSION',
       sessionMin: '25',
       sessionSec: '00'
     }
@@ -171,7 +173,7 @@ class App extends React.Component {
           
 
           <div className="timerContainer">
-            <h1 id="timer-label">session</h1>
+            <h1 id="timer-label">{ this.state.session }</h1>
             <h1 id="time-left">{ this.state.sessionMin }:{ this.state.sessionSec }</h1>
           </div>
 
