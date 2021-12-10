@@ -3,6 +3,7 @@
 import React from 'react';
 import $ from 'jquery'
 import './App.css';
+import Countdown from 'react-countdown';
 
 let play = false
 
@@ -146,105 +147,111 @@ class App extends React.Component {
             sessionSec: [0, equation].join('')
           })
         } else if (that.state.sessionSec === '00' && play) {
-          
+                   
           
           if (that.state.breakMin > '10' && play) {
-              if (that.state.breakSec > '10' && play) {
-                that.setState({
-                  breakSec: eval(`${ that.state.breakSec } - 1`)
-                })
-              } else if (that.state.breakSec > '00' && play) {
-                let firstNum = parseInt(that.state.breakSec)
-                let equation = eval(`${ firstNum } - 1`)
-                that.setState({
-                  breakSec: [0, equation].join('')
-                })
-              } else if (that.state.breakSec === '00' && play) {
-                that.setState({
-                  breakSec: '59',
-                  breakMin: eval(`${ that.state.breakMin } - 1`)
-                })
-              } else {
-                clearInterval(interval)
-              }
-            } else if (that.state.breakMin === 10 && play) {
-              if (that.state.breakSec > '10' && play) {
-                that.setState({
-                  breakSec: eval(`${ that.state.breakSec } - 1`)
-                })
-              } else if (that.state.breakSec > '00' && play) {
-                let firstNum = parseInt(that.state.breakSec)
-                let equation = eval(`${ firstNum } - 1`)
-                that.setState({
-                  breakSec: [0, equation].join('')
-                })
-              } else if (that.state.breakSec === '00' && play) {
-                let firstNum = parseInt(that.state.breakMin)
-                let equation = eval(`${ firstNum } - 1`)
-                that.setState({
-                  breakSec: '59',
-                  breakMin: [0, equation].join('')
-                })
-              } else {
-                clearInterval(interval)
-              }
-            } else if (that.state.breakMin > '00' && play) {
-              let minFirstNum = parseInt(that.state.breakMin)
+            if (that.state.breakSec > '10' && play) {
               that.setState({
-                breakMin: [0, minFirstNum].join('')
+                breakSec: eval(`${ that.state.breakSec } - 1`)
               })
-              if (that.state.breakSec > '10' && play) {
-                that.setState({
-                  breakSec: eval(`${ that.state.breakSec } - 1`)
-                })
-              } else if (that.state.breakSec > '00' && play) {
-                let firstNum = parseInt(that.state.breakSec)
-                let equation = eval(`${ firstNum } - 1`)
-                that.setState({
-                  breakSec: [0, equation].join('')
-                })
-              } else if (that.state.breakSec === '00' && play) {
-                let firstNum = parseInt(that.state.breakMin)
-                let equation = eval(`${ firstNum } - 1`)
-                that.setState({
-                  breakSec: '59',
-                  breakMin: [0, equation].join('')
-                })
-              } else {
-                clearInterval(interval)
-              }
-            } else if (that.state.breakMin === '00' && play) {
-              if (that.state.breakSec > '10' && play) {
-                that.setState({
-                  breakSec: eval(`${ that.state.breakSec } - 1`)
-                })
-              } else if (that.state.breakSec > '00' && play) {
-                let firstNum = parseInt(that.state.breakSec)
-                let equation = eval(`${ firstNum } - 1`)
-                that.setState({
-                  breakSec: [0, equation].join('')
-                })
-              } else if (that.state.breakSec === '00' && play) {
-                that.setState({
-                  breakMin: that.state.breakLength,
-                  breakSec: '00',
-                  sessionMin: that.state.sessionLength,
-                  sessionSec: '00'
-                })
-              } else {
-                clearInterval(interval)
-              }
+            } else if (that.state.breakSec > '00' && play) {
+              let firstNum = parseInt(that.state.breakSec)
+              let equation = eval(`${ firstNum } - 1`)
+              that.setState({
+                breakSec: [0, equation].join('')
+              })
+            } else if (that.state.breakSec === '00' && play) {
+              that.setState({
+                breakSec: '59',
+                breakMin: eval(`${ that.state.breakMin } - 1`)
+              })
             } else {
               clearInterval(interval)
             }
+          } else if (that.state.breakMin === 10 && play) {
+            if (that.state.breakSec > '10' && play) {
+              that.setState({
+                breakSec: eval(`${ that.state.breakSec } - 1`)
+              })
+            } else if (that.state.breakSec > '00' && play) {
+              let firstNum = parseInt(that.state.breakSec)
+              let equation = eval(`${ firstNum } - 1`)
+              that.setState({
+                breakSec: [0, equation].join('')
+              })
+            } else if (that.state.breakSec === '00' && play) {
+              let firstNum = parseInt(that.state.breakMin)
+              let equation = eval(`${ firstNum } - 1`)
+              that.setState({
+                breakSec: '59',
+                breakMin: [0, equation].join('')
+              })
+            } else {
+              clearInterval(interval)
+            }
+          } else if (that.state.breakMin > '00' && play) {
+            let minFirstNum = parseInt(that.state.breakMin)
+            that.setState({
+              breakMin: [0, minFirstNum].join('')
+            })
+            if (that.state.breakSec > '10' && play) {
+              that.setState({
+                breakSec: eval(`${ that.state.breakSec } - 1`)
+              })
+            } else if (that.state.breakSec > '00' && play) {
+              let firstNum = parseInt(that.state.breakSec)
+              let equation = eval(`${ firstNum } - 1`)
+              that.setState({
+                breakSec: [0, equation].join('')
+              })
+            } else if (that.state.breakSec === '00' && play) {
+              let firstNum = parseInt(that.state.breakMin)
+              let equation = eval(`${ firstNum } - 1`)
+              that.setState({
+                breakSec: '59',
+                breakMin: [0, equation].join('')
+              })
+            } else {
+              clearInterval(interval)
+            }
+          } else if (that.state.breakMin === '00' && play) {
+            if (that.state.breakSec > '10' && play) {
+              that.setState({
+                breakSec: eval(`${ that.state.breakSec } - 1`)
+              })
+            } else if (that.state.breakSec > '00' && play) {
+              let firstNum = parseInt(that.state.breakSec)
+              let equation = eval(`${ firstNum } - 1`)
+              that.setState({
+                breakSec: [0, equation].join('')
+              })
+            } else if (that.state.breakSec === '00' && play) {
+              that.setState({
+                breakMin: that.state.breakLength,
+                breakSec: '00',
+                sessionMin: that.state.sessionLength,
+                sessionSec: '00'
+              })
+            } else {
+              clearInterval(interval)
+            }
+          } else {
+            clearInterval(interval)
+          }
 
-            
+
         } else {
           clearInterval(interval)
         }
       } else {
         clearInterval(interval)
       }
+
+
+
+      
+
+
     }, 1000)
 
     
@@ -291,6 +298,7 @@ class App extends React.Component {
           <div className="timerContainer">
             <h1 id="timer-label"></h1>
             <h1 id="time-left"></h1>
+            <Countdown date={ Date.now() + 10000 } />
           </div>
 
           <div className="controlsContainer">
