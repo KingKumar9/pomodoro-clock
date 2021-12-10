@@ -1,4 +1,6 @@
 import React from 'react'
+import './App.css'
+import './App.scss';
 
 // COMPONENTS:
 class TimerLengthControl extends React.Component {
@@ -6,25 +8,27 @@ class TimerLengthControl extends React.Component {
       return (
         <div className="length-control">
           <div id={this.props.titleID}>{this.props.title}</div>
-          <button
-            className="btn-level"
-            id={this.props.minID}
-            onClick={this.props.onClick}
-            value="-"
-          >
-            <i className="fa fa-arrow-down fa-2x" />
-          </button>
-          <div className="btn-level" id={this.props.lengthID}>
-            {this.props.length}
+          <div className='lengthController'>
+            <button
+                className="btn-level"
+                id={this.props.minID}
+                onClick={this.props.onClick}
+                value="-"
+            >
+                -
+            </button>
+            <div className="btn-level" id={this.props.lengthID}>
+                {this.props.length}
+            </div>
+            <button
+                className="btn-level"
+                id={this.props.addID}
+                onClick={this.props.onClick}
+                value="+"
+            >
+                +
+            </button>
           </div>
-          <button
-            className="btn-level"
-            id={this.props.addID}
-            onClick={this.props.onClick}
-            value="+"
-          >
-            <i className="fa fa-arrow-up fa-2x" />
-          </button>
         </div>
       );
     }

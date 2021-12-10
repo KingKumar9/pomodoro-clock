@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 /* eslint-disable no-eval */
 import React from 'react';
-import './App.css';
+import './App.css'
+import './App.scss';
 import TimerLengthControl from './timerLengthControl';
 
 const accurateInterval = function (fn, time) {
@@ -169,26 +170,29 @@ class Timer extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div className="container">
         <div className="main-title">25 + 5 Clock</div>
-        <TimerLengthControl
-          addID="break-increment"
-          length={this.state.brkLength}
-          lengthID="break-length"
-          minID="break-decrement"
-          onClick={this.setBrkLength}
-          title="Break Length"
-          titleID="break-label"
-        />
-        <TimerLengthControl
-          addID="session-increment"
-          length={this.state.seshLength}
-          lengthID="session-length"
-          minID="session-decrement"
-          onClick={this.setSeshLength}
-          title="Session Length"
-          titleID="session-label"
-        />
+        <div className='lengthControllers'>
+          <TimerLengthControl
+            addID="break-increment"
+            length={this.state.brkLength}
+            lengthID="break-length"
+            minID="break-decrement"
+            onClick={this.setBrkLength}
+            title="Break Length"
+            titleID="break-label"
+          />
+          <TimerLengthControl
+            addID="session-increment"
+            length={this.state.seshLength}
+            lengthID="session-length"
+            minID="session-decrement"
+            onClick={this.setSeshLength}
+            title="Session Length"
+            titleID="session-label"
+          />
+        </div>
+        
         <div className="timer" style={this.state.alarmColor}>
           <div className="timer-wrapper">
             <div id="timer-label">{this.state.timerType}</div>
@@ -197,11 +201,10 @@ class Timer extends React.Component {
         </div>
         <div className="timer-control">
           <button id="start_stop" onClick={this.timerControl}>
-            <i className="fa fa-play fa-2x" />
-            <i className="fa fa-pause fa-2x" />
+            Play/Pause
           </button>
           <button id="reset" onClick={this.reset}>
-            <i className="fa fa-refresh fa-2x" />
+            Reset
           </button>
         </div>
         

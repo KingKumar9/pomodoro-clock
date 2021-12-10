@@ -1,81 +1,158 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  justify-items: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
 }
 
-button:hover {
+body {
+  background: #1e555c;
+  color: white;
+  font-size: 30px;
+  text-align: center;
+}
+
+body #container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100vh;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+body #container .main-title {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+body #container .length-control {
+  width: 250px;
+}
+
+body #container button {
+  background: none;
+  outline: none;
+  border: none;
+  color: white;
   cursor: pointer;
 }
 
-h1, h3 {
+body #container .btn-level,
+body #container .length-control {
+  display: inline-block;
+}
+
+body #container .btn-level .btn-level:nth-child(3),
+body #container .length-control .btn-level:nth-child(3) {
+  width: 40px;
+}
+
+body #container .timer {
+  border: 7px solid #13353a;
+  margin: 20px auto 10px auto;
+  width: 270px;
+  height: 160px;
+  border-radius: 50px;
+  position: relative;
+}
+
+body #container .timer .timer-wrapper {
+  position: absolute;
+  width: 190px;
+  height: 110px;
+  left: 50%;
+  top: 50%;
+  margin-left: -95px;
+  margin-top: -57px;
+}
+
+body #container .timer #time-left {
+  font-family: digital;
+  font-size: 80px;
+}
+
+body #container .timer .timer-control button:active {
+  color: #13353a;
+}
+
+@media screen and (max-width: 500px) {
+  #container {
+    transform: scale(0.8);
+    -webkit-transform: scale(0.8);
+    -moz-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    -o-transform: scale(0.8);
+  }
+}
+
+.author {
   text-align: center;
-  text-transform: uppercase;
-  color: white;
-  padding: 10px;
+  font-family: Share Tech Mono, sans;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #a50d0d;
 }
 
-.container {
-  width: 100vw;
-  height: 100vh;
-  background-color: brown; 
+.author a {
+  text-decoration: none;
+  color: #00264d;
+  line-height: 26px;
+}
+
+.lengthController {
+  margin: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
-.clock {
-  width: 70%;
-  height: 70%;
-  background-color: blueviolet;
+.lengthControllers {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 25%;
 }
 
-.lengthContainer {
-  width: 100%;
-  background-color: blue;
+.btn-level {
   padding: 15px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
 }
 
-.length {
-  width: 100%;
+.main-title {
+  font-size: 50px;
+  font-weight: 500;
+  padding: 20px;
 }
 
-.setters {
-  color: white;
+.length-control {
   padding: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 25px;
 }
 
-.valueIncrement {
-  width: 15px;
-  height: 15px;
-  background: none;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  transform: translateY(12px) rotate(-135deg);
+.timer {
+  padding: 15px;
 }
-
-.valueDecrement {
-  width: 15px;
-  height: 15px;
-  background: none;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  transform: translateY(3px) rotate(45deg);
-}
-
-.controlsContainer {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
+/*# sourceMappingURL=App.css.map */
