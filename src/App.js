@@ -1,314 +1,224 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 /* eslint-disable no-eval */
 import React from 'react';
-import $ from 'jquery'
 import './App.css';
-import Countdown from 'react-countdown';
+import './App.scss';
+import TimerLengthControl from './timerLengthControl';
 
-let play = false
+const accurateInterval = function (fn, time) {
+  var cancel, nextAt, timeout, wrapper;
+  nextAt = new Date().getTime() + time;
+  timeout = null;
+  wrapper = function () {
+    nextAt += time;
+    timeout = setTimeout(wrapper, nextAt - new Date().getTime());
+    return fn();
+  };
+  cancel = function () {
+    return clearTimeout(timeout);
+  };
+  timeout = setTimeout(wrapper, nextAt - new Date().getTime());
+  return {
+    cancel: cancel
+  };
+};
 
-class App extends React.Component {
+
+class Timer extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      break: 'break',
-      breakLength: '5',
-      breakMin: '5',
-      breakSec: '00',
-      session: 'session',
-      sessionLength: '25',
-      sessionMin: '25',
-      sessionSec: '00'
+      brkLength: 5,
+      seshLength: 25,
+      timerState: 'stopped',
+      timerType: 'Session',
+      timer: 1500,
+      intervalID: '',
+      alarmColor: { color: 'white' }
+    };
+    this.setBrkLength = this.setBrkLength.bind(this);
+    this.setSeshLength = this.setSeshLength.bind(this);
+    this.lengthControl = this.lengthControl.bind(this);
+    this.timerControl = this.timerControl.bind(this);
+    this.beginCountDown = this.beginCountDown.bind(this);
+    this.decrementTimer = this.decrementTimer.bind(this);
+    this.phaseControl = this.phaseControl.bind(this);
+    this.warning = this.warning.bind(this);
+    this.buzzer = this.buzzer.bind(this);
+    this.switchTimer = this.switchTimer.bind(this);
+    this.clockify = this.clockify.bind(this);
+    this.reset = this.reset.bind(this);
+  }
+  setBrkLength(e) {
+    this.lengthControl(
+      'brkLength',
+      e.currentTarget.value,
+      this.state.brkLength,
+      'Session'
+    );
+  }
+  setSeshLength(e) {
+    this.lengthControl(
+      'seshLength',
+      e.currentTarget.value,
+      this.state.seshLength,
+      'Break'
+    );
+  }
+  lengthControl(stateToChange, sign, currentLength, timerType) {
+    if (this.state.timerState === 'running') {
+      return;
     }
-    this.reset = this.reset.bind(this)
-    this.decrement = this.decrement.bind(this)
-    this.increment = this.increment.bind(this)
-    this.startStop = this.startStop.bind(this)
-  }
-
-  reset = () => {
-    this.setState({
-      breakLength: '5',
-      breakMin: '5',
-      breakSec: '00',
-      sessionLength: '25',
-      sessionMin: '25',
-      sessionSec: '00'
-    })
-    play = false
-  }
-
-  decrement = (e) => {
-    if (e.target.id === "break-decrement" && this.state.breakMin > '1') {
-      this.setState({
-        breakLength: eval(`${ this.state.breakLength } - 1`),
-        breakMin: eval(`${ this.state.breakMin } - 1`)
-      })
-    } else if (e.target.id === "session-decrement" && this.state.sessionMin > '1') {
-      this.setState({
-        sessionLength: eval(`${ this.state.sessionLength } - 1`),
-        sessionMin: eval(`${ this.state.sessionMin } - 1`)
-      })
-    }
-  }
-
-  increment = (e) => {
-    if (e.target.id === "break-increment" && this.state.breakMin < '60') {
-      this.setState({
-        breakLength: eval(`${ this.state.breakLength } + 1`),
-        breakMin: eval(`${ this.state.breakMin } + 1`)
-      })
-    } else if (e.target.id === "session-increment" && this.state.sessionMin < '60') {
-      this.setState({
-        sessionLength: eval(`${ this.state.sessionLength } + 1`),
-        sessionMin: eval(`${ this.state.sessionMin } + 1`)
-      })
-    }
-  }
-
-  startStop = () => {
-    let that = this
-    play = !play
-    let interval = setInterval(function() {
-      if (that.state.sessionMin > '10' && play) {
-        if (that.state.sessionSec > '10' && play) {
-          that.setState({
-            sessionSec: eval(`${ that.state.sessionSec } - 1`)
-          })
-        } else if (that.state.sessionSec > '00' && play) {
-          let firstNum = parseInt(that.state.sessionSec)
-          let equation = eval(`${ firstNum } - 1`)
-          that.setState({
-            sessionSec: [0, equation].join('')
-          })
-        } else if (that.state.sessionSec === '00' && play) {
-          that.setState({
-            sessionSec: '59',
-            sessionMin: eval(`${ that.state.sessionMin } - 1`)
-          })
-        } else {
-          clearInterval(interval)
-        }
-      } else if (that.state.sessionMin === 10 && play) {
-        if (that.state.sessionSec > '10' && play) {
-          that.setState({
-            sessionSec: eval(`${ that.state.sessionSec } - 1`)
-          })
-        } else if (that.state.sessionSec > '00' && play) {
-          let firstNum = parseInt(that.state.sessionSec)
-          let equation = eval(`${ firstNum } - 1`)
-          that.setState({
-            sessionSec: [0, equation].join('')
-          })
-        } else if (that.state.sessionSec === '00' && play) {
-          let firstNum = parseInt(that.state.sessionMin)
-          let equation = eval(`${ firstNum } - 1`)
-          that.setState({
-            sessionSec: '59',
-            sessionMin: [0, equation].join('')
-          })
-        } else {
-          clearInterval(interval)
-        }
-      } else if (that.state.sessionMin > '00' && play) {
-        let minFirstNum = parseInt(that.state.sessionMin)
-        that.setState({
-          sessionMin: [0, minFirstNum].join('')
-        })
-        if (that.state.sessionSec > '10' && play) {
-          that.setState({
-            sessionSec: eval(`${ that.state.sessionSec } - 1`)
-          })
-        } else if (that.state.sessionSec > '00' && play) {
-          let firstNum = parseInt(that.state.sessionSec)
-          let equation = eval(`${ firstNum } - 1`)
-          that.setState({
-            sessionSec: [0, equation].join('')
-          })
-        } else if (that.state.sessionSec === '00' && play) {
-          let firstNum = parseInt(that.state.sessionMin)
-          let equation = eval(`${ firstNum } - 1`)
-          that.setState({
-            sessionSec: '59',
-            sessionMin: [0, equation].join('')
-          })
-        } else {
-          clearInterval(interval)
-        }
-      } else if (that.state.sessionMin === '00' && play) {
-        if (that.state.sessionSec > '10' && play) {
-          that.setState({
-            sessionSec: eval(`${ that.state.sessionSec } - 1`)
-          })
-        } else if (that.state.sessionSec > '00' && play) {
-          let firstNum = parseInt(that.state.sessionSec)
-          let equation = eval(`${ firstNum } - 1`)
-          that.setState({
-            sessionSec: [0, equation].join('')
-          })
-        } else if (that.state.sessionSec === '00' && play) {
-                   
-          
-          if (that.state.breakMin > '10' && play) {
-            if (that.state.breakSec > '10' && play) {
-              that.setState({
-                breakSec: eval(`${ that.state.breakSec } - 1`)
-              })
-            } else if (that.state.breakSec > '00' && play) {
-              let firstNum = parseInt(that.state.breakSec)
-              let equation = eval(`${ firstNum } - 1`)
-              that.setState({
-                breakSec: [0, equation].join('')
-              })
-            } else if (that.state.breakSec === '00' && play) {
-              that.setState({
-                breakSec: '59',
-                breakMin: eval(`${ that.state.breakMin } - 1`)
-              })
-            } else {
-              clearInterval(interval)
-            }
-          } else if (that.state.breakMin === 10 && play) {
-            if (that.state.breakSec > '10' && play) {
-              that.setState({
-                breakSec: eval(`${ that.state.breakSec } - 1`)
-              })
-            } else if (that.state.breakSec > '00' && play) {
-              let firstNum = parseInt(that.state.breakSec)
-              let equation = eval(`${ firstNum } - 1`)
-              that.setState({
-                breakSec: [0, equation].join('')
-              })
-            } else if (that.state.breakSec === '00' && play) {
-              let firstNum = parseInt(that.state.breakMin)
-              let equation = eval(`${ firstNum } - 1`)
-              that.setState({
-                breakSec: '59',
-                breakMin: [0, equation].join('')
-              })
-            } else {
-              clearInterval(interval)
-            }
-          } else if (that.state.breakMin > '00' && play) {
-            let minFirstNum = parseInt(that.state.breakMin)
-            that.setState({
-              breakMin: [0, minFirstNum].join('')
-            })
-            if (that.state.breakSec > '10' && play) {
-              that.setState({
-                breakSec: eval(`${ that.state.breakSec } - 1`)
-              })
-            } else if (that.state.breakSec > '00' && play) {
-              let firstNum = parseInt(that.state.breakSec)
-              let equation = eval(`${ firstNum } - 1`)
-              that.setState({
-                breakSec: [0, equation].join('')
-              })
-            } else if (that.state.breakSec === '00' && play) {
-              let firstNum = parseInt(that.state.breakMin)
-              let equation = eval(`${ firstNum } - 1`)
-              that.setState({
-                breakSec: '59',
-                breakMin: [0, equation].join('')
-              })
-            } else {
-              clearInterval(interval)
-            }
-          } else if (that.state.breakMin === '00' && play) {
-            if (that.state.breakSec > '10' && play) {
-              that.setState({
-                breakSec: eval(`${ that.state.breakSec } - 1`)
-              })
-            } else if (that.state.breakSec > '00' && play) {
-              let firstNum = parseInt(that.state.breakSec)
-              let equation = eval(`${ firstNum } - 1`)
-              that.setState({
-                breakSec: [0, equation].join('')
-              })
-            } else if (that.state.breakSec === '00' && play) {
-              that.setState({
-                breakMin: that.state.breakLength,
-                breakSec: '00',
-                sessionMin: that.state.sessionLength,
-                sessionSec: '00'
-              })
-            } else {
-              clearInterval(interval)
-            }
-          } else {
-            clearInterval(interval)
-          }
-
-
-        } else {
-          clearInterval(interval)
-        }
-      } else {
-        clearInterval(interval)
+    if (this.state.timerType === timerType) {
+      if (sign === '-' && currentLength !== 1) {
+        this.setState({ [stateToChange]: currentLength - 1 });
+      } else if (sign === '+' && currentLength !== 60) {
+        this.setState({ [stateToChange]: currentLength + 1 });
       }
-
-
-
-      
-
-
-    }, 1000)
-
-    
-  }
-
-  componentDidMount() {
-    $("#timer-label").html(this.state.session)
-    $("#time-left").html(`${ this.state.sessionMin }:${ this.state.sessionSec }`)
-  }
-
-  componentDidUpdate() {
-    if (this.state.sessionMin === '00' && this.state.sessionSec === '00') {
-      $("#timer-label").html(this.state.break)
-      $("#time-left").html(`${ this.state.breakMin }:${ this.state.breakSec }`)
-    } else {
-      $("#timer-label").html(this.state.session)
-      $("#time-left").html(`${ this.state.sessionMin }:${ this.state.sessionSec }`)
+    } else if (sign === '-' && currentLength !== 1) {
+      this.setState({
+        [stateToChange]: currentLength - 1,
+        timer: currentLength * 60 - 60
+      });
+    } else if (sign === '+' && currentLength !== 60) {
+      this.setState({
+        [stateToChange]: currentLength + 1,
+        timer: currentLength * 60 + 60
+      });
     }
   }
-
+  timerControl() {
+    if (this.state.timerState === 'stopped') {
+      this.beginCountDown();
+      this.setState({ timerState: 'running' });
+    } else {
+      this.setState({ timerState: 'stopped' });
+      if (this.state.intervalID) {
+        this.state.intervalID.cancel();
+      }
+    }
+  }
+  beginCountDown() {
+    this.setState({
+      intervalID: accurateInterval(() => {
+        this.decrementTimer();
+        this.phaseControl();
+      }, 1000)
+    });
+  }
+  decrementTimer() {
+    this.setState({ timer: this.state.timer - 1 });
+  }
+  phaseControl() {
+    let timer = this.state.timer;
+    this.warning(timer);
+    this.buzzer(timer);
+    if (timer < 0) {
+      if (this.state.intervalID) {
+        this.state.intervalID.cancel();
+      }
+      if (this.state.timerType === 'Session') {
+        this.beginCountDown();
+        this.switchTimer(this.state.brkLength * 60, 'Break');
+      } else {
+        this.beginCountDown();
+        this.switchTimer(this.state.seshLength * 60, 'Session');
+      }
+    }
+  }
+  warning(_timer) {
+    if (_timer < 61) {
+      this.setState({ alarmColor: { color: '#a50d0d' } });
+    } else {
+      this.setState({ alarmColor: { color: 'white' } });
+    }
+  }
+  buzzer(_timer) {
+    if (_timer === 0) {
+      this.audioBeep.play();
+    }
+  }
+  switchTimer(num, str) {
+    this.setState({
+      timer: num,
+      timerType: str,
+      alarmColor: { color: 'white' }
+    });
+  }
+  clockify() {
+    let minutes = Math.floor(this.state.timer / 60);
+    let seconds = this.state.timer - minutes * 60;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return minutes + ':' + seconds;
+  }
+  reset() {
+    this.setState({
+      brkLength: 5,
+      seshLength: 25,
+      timerState: 'stopped',
+      timerType: 'Session',
+      timer: 1500,
+      intervalID: '',
+      alarmColor: { color: 'white' }
+    });
+    if (this.state.intervalID) {
+      this.state.intervalID.cancel();
+    }
+    this.audioBeep.pause();
+    this.audioBeep.currentTime = 0;
+  }
   render() {
     return (
       <div className="container">
-        <div className="clock">
-          <div className="lengthContainer">
-            <div className="length">
-              <h3 id="break-label">break length</h3>
-              <div className="setters">
-                <button onClick={ this.decrement } id="break-decrement" className="valueDecrement" />
-                <h2 id="break-length">{ this.state.breakLength }</h2>
-                <button onClick={ this.increment } id="break-increment" className="valueIncrement" />
-              </div>
-            </div>
-            <div className="length">
-              <h3 id="session-label">session length</h3>
-              <div className="setters">
-                <button onClick={ this.decrement } id="session-decrement" className="valueDecrement" />
-                <h2 id="session-length">{ this.state.sessionLength }</h2>
-                <button onClick={ this.increment } id="session-increment" className="valueIncrement" />
-              </div>
-            </div>
-          </div>
-          
-          <div className="timerContainer">
-            <h1 id="timer-label"></h1>
-            <h1 id="time-left"></h1>
-            <Countdown date={ Date.now() + 10000 } />
-          </div>
-
-          <div className="controlsContainer">
-            <button onClick={ this.startStop } id="start_stop">Start</button>
-            <button onClick={ this.reset } id="reset">Reset</button>
+        <div className="main-title">25 + 5 Clock</div>
+        <div className='lengthControllers'>
+          <TimerLengthControl
+            addID="break-increment"
+            length={this.state.brkLength}
+            lengthID="break-length"
+            minID="break-decrement"
+            onClick={this.setBrkLength}
+            title="Break Length"
+            titleID="break-label"
+          />
+          <TimerLengthControl
+            addID="session-increment"
+            length={this.state.seshLength}
+            lengthID="session-length"
+            minID="session-decrement"
+            onClick={this.setSeshLength}
+            title="Session Length"
+            titleID="session-label"
+          />
+        </div>
+        
+        <div className="timer" style={this.state.alarmColor}>
+          <div className="timer-wrapper">
+            <div id="timer-label">{this.state.timerType}</div>
+            <div id="time-left">{this.clockify()}</div>
           </div>
         </div>
+        <div className="timer-control">
+          <button id="start_stop" onClick={this.timerControl}>
+            Play/Pause
+          </button>
+          <button id="reset" onClick={this.reset}>
+            Reset
+          </button>
+        </div>
+        
+        <audio
+          id="beep"
+          preload="auto"
+          ref={(audio) => {
+            this.audioBeep = audio;
+          }}
+          src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
+        />
       </div>
-    )
+    );
   }
 }
 
-export default App;
+export default Timer;
